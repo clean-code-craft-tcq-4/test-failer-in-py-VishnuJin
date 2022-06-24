@@ -17,17 +17,21 @@ def get_color_pair_from_number(pairnumber):
     return color_pair[1:]
 
 
-def format_color_map(color_map):
-    formatted_color_pairs = ""
-    for color_pair in color_map:
-        formatted_color_pairs += " | ".join([str(item) for item in color_pair]) + "\n"
-    return formatted_color_pairs
+def format_color_map(color_pair):
+    pair_number, major_color, minor_color = color_pair
+    return f'{pair_number} | {major_color} | {minor_color}'
 
 
 def print_color_map(color_map):
-    print(format_color_map(color_map))
+    for color_pair in color_map:
+        print(format_color_map(color_pair))
+
+assert get_color_pair_from_number(1) == ("White", "Blue")
+assert format_color_map((1, 'White', 'Blue')) == "1  | White  | Blue"
+assert format_color_map((20, 'Violet', 'Blue')) == "20 | Violet | Blue"
 
 
+# the new implementation is just for learning from previous class
 expected_color_map = EvenColorPairs()
 actual_even_color_map = generate_color_map()
 assert get_color_pair_from_number(1) == expected_color_map.get_color_from_pairnumber(1)
