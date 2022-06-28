@@ -1,18 +1,23 @@
+from exception_handlers import get_error_type
+
+
 def size(cms):
-    if cms < 38:
+    if cms > 34 and cms <= 38:
         return "S"
-    elif cms > 38 and cms < 42:
+    elif cms > 38 and cms <= 42:
         return "M"
-    else:
+    elif cms > 42 and cms <= 46:
         return "L"
+    else:
+        raise ValueError("Invalid input")
 
 
 assert size(37) == "S"
 assert size(40) == "M"
 assert size(43) == "L"
-assert size(38) == "S"
-assert size(42) == "M"
-assert size(-1) == "Invalid input"
-assert size(2.3) == "Invalid input"
+
+assert get_error_type(size, -1) == ValueError
+assert get_error_type(size, 1) == ValueError
+assert get_error_type(size, "A") == TypeError
 
 print("All is well \n")
