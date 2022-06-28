@@ -1,13 +1,21 @@
-
-def print_color_map():
-    major_colors = ["White", "Red", "Black", "Yellow", "Violet"]
-    minor_colors = ["Blue", "Orange", "Green", "Brown", "Slate"]
-    for i, major in enumerate(major_colors):
-        for j, minor in enumerate(minor_colors):
-            print(f'{i * 5 + j} | {major} | {minor}')
-    return len(major_colors) * len(minor_colors)
+from wire_color_pairs.even_color_pairs import EvenColorPairs
+from wire_color_pairs.color_pair import ColorPair
+from exception_handlers import get_error_type
 
 
-result = print_color_map()
-assert(result == 25)
-print("All is well (maybe!)\n")
+color_map = EvenColorPairs()
+
+assert color_map.get_color_from_pairnumber(1) == ("White", "Blue")
+assert (
+    color_map.format_color_pair_item(ColorPair(1, "White", "Blue"))
+    == " 1 |  White |   Blue"
+)
+assert (
+    color_map.format_color_pair_item(ColorPair(20, "Yellow", "Slate"))
+    == "20 | Yellow |  Slate"
+)
+
+assert get_error_type(color_map.get_color_from_pairnumber, 100) == ValueError
+assert get_error_type(color_map.get_color_from_pairnumber, "A") == TypeError
+
+print("All is well\n")

@@ -1,25 +1,17 @@
-alert_failure_count = 0
+from temperature_alerter import send_alert
+from temperature_alerter.temperature_converter import convert_farenheit_to_celcius
+from temperature_alerter.send_alert import alert_in_celcius
+from temperature_alerter.network_alert_stub import network_alert_stub
+from exception_handlers import get_error_type
 
-def network_alert_stub(celcius):
-    print(f'ALERT: Temperature is {celcius} celcius')
-    # Return 200 for ok
-    # Return 500 for not-ok
-    # stub always succeeds and returns 200
-    return 200
+alert_in_celcius(400.5, network_alert_stub)  # resp 500 - failure
+alert_in_celcius(303.6, network_alert_stub)  # resp 500 - failure
+alert_in_celcius(201.8, network_alert_stub)  # resp 200 - success
 
-def alert_in_celcius(farenheit):
-    celcius = (farenheit - 32) * 5 / 9
-    returnCode = network_alert_stub(celcius)
-    if returnCode != 200:
-        # non-ok response is not an error! Issues happen in life!
-        # let us keep a count of failures to report
-        # However, this code doesn't count failures!
-        # Add a test below to catch this bug. Alter the stub above, if needed.
-        global alert_failure_count
-        alert_failure_count += 0
+assert send_alert.alert_failure_count == 2
+assert f"{convert_farenheit_to_celcius(201.8):.2f}" == "94.33"
+assert get_error_type(alert_in_celcius, "A", network_alert_stub) == TypeError
+assert get_error_type(convert_farenheit_to_celcius, "A") == TypeError
 
-
-alert_in_celcius(400.5)
-alert_in_celcius(303.6)
-print(f'{alert_failure_count} alerts failed.')
-print('All is well (maybe!)')
+print(f"{send_alert.alert_failure_count} alerts failed.")
+print("All is well")
